@@ -8,10 +8,6 @@ class FormatTagLib {
         if (!attrs.timeZone) {
             attrs.timeZone = session.timeZone
         }
-        log.error(attrs)
-
-        log.error("Result is: ${formatTagLib.formatDate.call(attrs)}")
-
         out << formatTagLib.formatDate.call(attrs)
     }
 
