@@ -11,6 +11,8 @@ class TimezoneDetectionGrailsPlugin {
 
     def group = "com.captivatelabs.grails.plugins"
 
+    def loadAfter = ['data-binding']
+
     def title = "Timezone Detection Plugin" // Headline display name of the plugin
     def author = "Dustin D. Clark"
     def authorEmail = "dustin@captivatelabs.com"
@@ -27,20 +29,20 @@ Detects browser timezone and makes the information available in session.  Also m
     def license = "MIT"
 
     // Details of company behind the plugin (if there is one)
-    def organization = [ name: "Captivate Labs, Inc", url: "http://www.captivatelabs.com/" ]
+    def organization = [name: "Captivate Labs, Inc", url: "http://www.captivatelabs.com/"]
 
     // Location of the plugin's issue tracker.
-    def issueManagement = [ system: "GITHUB", url: "https://github.com/dustindclark/grails-timezone-detection/issues" ]
+    def issueManagement = [system: "GITHUB", url: "https://github.com/dustindclark/grails-timezone-detection/issues"]
 
     // Online location of the plugin's browseable source code.
-    def scm = [ url: "https://github.com/dustindclark/grails-timezone-detection" ]
+    def scm = [url: "https://github.com/dustindclark/grails-timezone-detection"]
 
     def doWithWebDescriptor = { xml ->
         // TODO Implement additions to web.xml (optional), this event occurs before
     }
 
     def doWithSpring = {
-        // TODO Implement runtime spring config (optional)
+        timeZoneAwareDateEditor(com.captivatelabs.grails.timezone.detection.TimeZoneAwareDateEditor)
     }
 
     def doWithDynamicMethods = { ctx ->
