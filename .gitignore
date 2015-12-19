@@ -31,3 +31,8 @@
 
 # "temporary" build files
 /target
+
+/target-eclipse
+**/*.iml
+/.idea
+.slcache
