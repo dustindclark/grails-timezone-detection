@@ -21,7 +21,7 @@ class TimezoneTagLib {
         if (attrs.attribute) {
             out << timeZone."${attribute}"
         } else {
-            out << timeZone.ID
+            out << timeZone.getDisplayName(timeZone.inDaylightTime(new Date()), TimeZone.SHORT, request.getLocale())
         }
 
     }

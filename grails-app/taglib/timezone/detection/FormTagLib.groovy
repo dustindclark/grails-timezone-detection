@@ -13,6 +13,11 @@ class FormTagLib {
             attrs.value = new Date(attrs.value.time + adjustment)
         }
         formTagLib.datePicker.call(attrs)
+        if (! attrs.suppressTimezone) {
+            out << "<span class='tz'>"
+            out << tz.show()
+            out << "</span>"
+        }
     }
 
     private def getDefaultFormTagLib() {
