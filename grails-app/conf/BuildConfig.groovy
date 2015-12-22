@@ -46,3 +46,5 @@ grails.project.dependency.resolution = {
         }
     }
 }
+
+grails.project.repos.grailsCentral.username = 'test-with-username'
