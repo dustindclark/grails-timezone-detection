@@ -9,8 +9,6 @@ class TimezoneDetectionGrailsPlugin {
 
     def dependsOn = [assetPipeline: '* > 2.0']
 
-    def group = "com.captivatelabs.grails.plugins"
-
     def loadAfter = ['data-binding']
 
     def title = "Timezone Detection Plugin" // Headline display name of the plugin
