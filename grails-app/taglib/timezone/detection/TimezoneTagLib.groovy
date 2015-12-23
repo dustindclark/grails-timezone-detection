@@ -19,10 +19,9 @@ class TimezoneTagLib {
             return
         }
         if (attrs.attribute) {
-            out << timeZone."${attribute}"
+            out << timeZone."${attrs.attribute}"
         } else {
             out << timeZone.getDisplayName(timeZone.inDaylightTime(new Date()), TimeZone.SHORT, request.getLocale())
         }
-
     }
 }
