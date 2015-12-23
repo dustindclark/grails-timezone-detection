@@ -1,7 +1,7 @@
 package timezone.detection
 
 class TimezoneTagLib {
-    static def namespace = 'tz'
+    static namespace = 'tz'
 
     def detect = {
         //Don't do this on a POST because posted data will be lost.

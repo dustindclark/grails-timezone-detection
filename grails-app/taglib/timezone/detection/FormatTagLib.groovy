@@ -11,7 +11,7 @@ class FormatTagLib {
         out << formatTagLib.formatDate.call(attrs)
     }
 
-    private def getDefaultFormatTagLib() {
+    private getDefaultFormatTagLib() {
         return grailsApplication.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.FormatTagLib')
     }
 }

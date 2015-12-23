@@ -20,7 +20,7 @@ class FormTagLib {
         }
     }
 
-    private def getDefaultFormTagLib() {
+    private getDefaultFormTagLib() {
         return grailsApplication.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.FormTagLib')
     }
 }
