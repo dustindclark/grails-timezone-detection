@@ -1,7 +1,7 @@
 import com.captivatelabs.grails.timezone.detection.TimeZoneAwareDateEditor
 
 class TimezoneDetectionGrailsPlugin {
-    def version = "0.2-SNAPSHOT"
+    def version = "0.1-SNAPSHOT"
     def grailsVersion = "2.4 > *"
     def loadAfter = ['data-binding']
     def title = "Timezone Detection Plugin"
