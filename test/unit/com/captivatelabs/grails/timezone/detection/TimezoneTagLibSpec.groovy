@@ -1,20 +1,25 @@
-package timezone.detection
+package com.captivatelabs.grails.timezone.detection
 
 import asset.pipeline.grails.AssetsTagLib
 import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
 import grails.test.mixin.web.GroovyPageUnitTestMixin
+import org.codehaus.groovy.grails.plugins.web.taglib.FormTagLib
+import org.codehaus.groovy.grails.plugins.web.taglib.FormatTagLib
 import spock.lang.Specification
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
  */
 @TestMixin(GroovyPageUnitTestMixin)
-@TestFor(TimezoneTagLib)
-class TimezoneTagLibSpec extends Specification {
+@TestFor(TimeZoneTagLib)
+class TimeZoneTagLibSpec extends Specification {
 
     def setup() {
         mockTagLib(AssetsTagLib)
+        mockTagLib(FormTagLib)
+        mockTagLib(FormatTagLib)
+        TimeZone.setDefault(TimeZone.getTimeZone("UTC"))
     }
 
     def cleanup() {
@@ -76,5 +81,34 @@ class TimezoneTagLibSpec extends Specification {
 
         then:
         rendered == tagLib.session.timeZone.inDaylightTime(new Date()) ? "Central Daylight Time" : "Central Standard Time"
+    }
+
+    void "test offset server to client time - datePicker"() {
+        when:
+        tagLib.session.timeZone = TimeZone.getTimeZone("America/Chicago")
+        Date date = new Date(116, 11, 1, 14, 0)
+        Date expectedDate = new Date(116, 11, 1, 8, 0)
+        Map attrs = [value: date]
+
+
+        String rendered = tagLib.datePicker(attrs).toString()
+
+        then:
+        Calendar.getInstance().timeZone == TimeZone.getTimeZone("UTC") //Server time is UTC
+        attrs.value == expectedDate
+        rendered.contains("<option value=\"08\" selected=\"selected\">08</option>")
+    }
+
+    void "test offset client to server time - formatDate"() {
+        when:
+        tagLib.session.timeZone = TimeZone.getTimeZone("America/Chicago")
+        Date date = new Date(116, 11, 1, 14, 0)
+        Map attrs = [date: date]
+
+        String rendered = tagLib.formatDate(attrs).toString()
+
+        then:
+        Calendar.getInstance().timeZone == TimeZone.getTimeZone("UTC") //Server time is UTC
+        rendered == "2016-12-01 08:00:00 ${tagLib.session.timeZone.inDaylightTime(new Date()) ? "CDT" : "CST"}"
     }
 }

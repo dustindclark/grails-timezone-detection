@@ -1,4 +1,4 @@
-package timezone.detection
+package com.captivatelabs.grails.timezone.detection
 
 import grails.converters.JSON
 
