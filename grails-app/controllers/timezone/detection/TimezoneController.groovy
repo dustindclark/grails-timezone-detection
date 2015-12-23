@@ -3,7 +3,6 @@ package timezone.detection
 import grails.converters.JSON
 
 class TimezoneController {
-    def grailsApplication
 
     def set() {
         session.timeZone = TimeZone.getTimeZone(params.tz) ?: "UNKNOWN"

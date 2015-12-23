@@ -5,7 +5,7 @@ import org.grails.databinding.TypedStructuredBindingEditor
 import org.grails.databinding.converters.AbstractStructuredDateBindingEditor
 
 /**
- * Created by dustin.clark on 12/19/15.
+ * @author dustin.clark
  */
 class TimeZoneAwareDateEditor extends AbstractStructuredDateBindingEditor<Date> implements TypedStructuredBindingEditor {
 
