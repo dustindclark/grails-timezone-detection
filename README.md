@@ -6,7 +6,12 @@ the default Grails formatDate tag to make use of the user's current timezone.
 
 # Installation
 
-TBD - pending approval
+Add the following to your BuildConfig.groovy in the plugins section:
+
+```groovy
+compile "org.grails.plugins:timezone-detection:latest.integration"
+
+```
 
 # Usage
 
