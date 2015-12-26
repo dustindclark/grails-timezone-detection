@@ -27,7 +27,7 @@ class TimeZoneTagLib {
 
     def datePicker = { attrs ->
         def formTagLib = getDefaultFormTagLib()
-        if (session.timeZone) {
+        if (session.timeZone && attrs.value) {
             attrs.value = TimeZoneUtil.offsetDate(Calendar.getInstance().timeZone, session.timeZone, attrs.value)
         }
         formTagLib.datePicker.call(attrs)

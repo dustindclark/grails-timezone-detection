@@ -3,7 +3,7 @@ package com.captivatelabs.grails.timezone.detection
 final class TimeZoneUtil {
 
     static Date offsetDate(TimeZone fromTimezone, TimeZone toTimezone, Date dateToOffset) {
-        if (!fromTimezone || !toTimezone) {
+        if (!fromTimezone || !toTimezone || !dateToOffset) {
             return dateToOffset
         }
         long fromOffset = fromTimezone.getRawOffset() + (fromTimezone.inDaylightTime(dateToOffset) ? fromTimezone.getDSTSavings() : 0)
