@@ -70,6 +70,11 @@ class TimeZoneUtilSpec extends Specification{
         TimeZoneUtil.offsetDate(fromTimezone, toTimezone, date) == expectedDate
     }
 
+    void "test no null pointers"() {
+        expect:
+        TimeZoneUtil.offsetDate(null, null, null) == null
+    }
+
 
 
 }
