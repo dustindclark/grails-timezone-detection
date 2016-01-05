@@ -4,31 +4,39 @@ class TimeZoneTagLib {
     static namespace = 'tz'
 
     def detect = {
-        //Don't do this on a POST because posted data will be lost.
-        if (!session.timeZone && request.method == 'GET') {
-            out << asset.javascript(src: 'timezone-detection.js')
-            out << "<script type='text/javascript'>"
-            out << "doTimezoneDetection('${createLink(controller: 'timezone', action: 'set')}/', '${request.forwardURI}');"
-            out << "</script>"
+        try {
+            //Don't do this on a POST because posted data will be lost.
+            if (!getCurrentTimezone() && request.method == 'GET') {
+                out << asset.javascript(src: 'timezone-detection.js')
+                out << "<script type='text/javascript'>"
+                out << "doTimezoneDetection('${createLink(controller: 'timezone', action: 'set')}/', '${request.forwardURI}');"
+                out << "</script>"
+            }
+        } catch (Exception ex) {
+            log.error("An error occurred attempting to detect the timezone: ${ex.message}.", ex)
         }
     }
 
     def show = { final attrs ->
-        TimeZone timeZone = session.timeZone
-        if (!timeZone) {
-            return
-        }
-        if (attrs.attribute) {
-            out << timeZone."${attrs.attribute}"
-        } else {
-            out << timeZone.getDisplayName(timeZone.inDaylightTime(new Date()), TimeZone.SHORT, request.getLocale())
+        try {
+            TimeZone timeZone = getCurrentTimezone()
+            if (!timeZone) {
+                return
+            }
+            if (attrs.attribute) {
+                out << timeZone."${attrs.attribute}"
+            } else {
+                out << timeZone.getDisplayName(timeZone.inDaylightTime(new Date()), TimeZone.SHORT, request.getLocale())
+            }
+        } catch (Exception ex) {
+            log.error("An error occurred attempting to show the timezone: ${ex.message}.", ex)
         }
     }
 
     def datePicker = { attrs ->
         def formTagLib = getDefaultFormTagLib()
-        if (session.timeZone && attrs.value) {
-            attrs.value = TimeZoneUtil.offsetDate(Calendar.getInstance().timeZone, session.timeZone, attrs.value)
+        if (getCurrentTimezone() && attrs.value) {
+            attrs.value = TimeZoneUtil.offsetDate(Calendar.getInstance().timeZone, getCurrentTimezone(), attrs.value)
         }
         formTagLib.datePicker.call(attrs)
         if (!attrs.suppressTimezone) {
@@ -41,9 +49,13 @@ class TimeZoneTagLib {
     def formatDate = { attrs ->
         def formatTagLib = getDefaultFormatTagLib()
         if (!attrs.timeZone) {
-            attrs.timeZone = session.timeZone
+            attrs.timeZone = getCurrentTimezone()
         }
         out << formatTagLib.formatDate.call(attrs)
+    }
+
+    private TimeZone getCurrentTimezone() {
+        return request.getSession(true).timeZone
     }
 
     private def getDefaultFormTagLib() {
