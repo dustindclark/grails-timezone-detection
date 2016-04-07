@@ -109,6 +109,6 @@ class TimeZoneTagLibSpec extends Specification {
 
         then:
         Calendar.getInstance().timeZone == TimeZone.getTimeZone("UTC") //Server time is UTC
-        rendered == "2016-12-01 08:00:00 ${tagLib.session.timeZone.inDaylightTime(new Date()) ? "CDT" : "CST"}"
+        rendered == "2016-12-01 08:00:00 ${TimeZone.getDefault().inDaylightTime(new Date()) ? "CDT" : "CST"}"
     }
 }
