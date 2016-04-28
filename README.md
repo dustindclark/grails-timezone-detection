@@ -31,8 +31,12 @@ will make use of the end user's timezone, even on the first page.
 You can also use the 'show' tag to render other timezone information:
 
 ```rhtml
-<tg:show /> <!-- results in TimeZone ID (i.e. UTC, CST) -->
-<tg:show attribute="displayName" /> <!-- results in TimeZone display name (i.e. Universal Time Coordinated, America/Chicago, etc) -->
+<tz:show /> <!-- results in TimeZone ID (i.e. UTC, CST) -->
+<tz:show attribute="displayName" /> <!-- results in TimeZone display name (i.e. Universal Time Coordinated, America/Chicago, etc) -->
 ```
 
 See the [java.util.TimeZone class](http://docs.oracle.com/javase/7/docs/api/java/util/TimeZone.html) for all available attributes.
+
+**NOTE&mdash;** If you leverage Spring Security with rejectIfNoRule set to true *and* you intend to detect the user's timezone on unprotected pages
+or in your template/layout, you *MUST* unprotect /timezone/**.  Otherwise, an infinite redirect to your login page may occur.
+Thank you, @harbdog for pointing this out.
