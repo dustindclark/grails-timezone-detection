@@ -1,25 +1,34 @@
 package com.captivatelabs.grails.timezone.detection
 
 import grails.testing.mixin.integration.Integration
-import grails.gorm.transactions.*
+import grails.util.GrailsWebMockUtil
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.web.context.WebApplicationContext
+import org.springframework.web.context.request.RequestContextHolder
 import spock.lang.Specification
 
 @Integration
-class TimeZoneTagLibSpecSpec extends Specification {
+class TimeZoneTagLibIntegrationSpec extends Specification {
 
+    @Autowired
     TimeZoneTagLib tagLib
 
+    @Autowired
+    WebApplicationContext ctx
+
     def setup() {
+        GrailsWebMockUtil.bindMockWebRequest(ctx)
         TimeZone.setDefault(TimeZone.getTimeZone("UTC"))
     }
 
-
     def cleanup() {
+        RequestContextHolder.resetRequestAttributes()
     }
 
     void "test detect when session.timezone is empty"() {
         when:
         tagLib.session.timeZone = null
+        tagLib.request.method = "GET"
 
         String rendered = tagLib.detect().toString()
 
@@ -30,7 +39,7 @@ class TimeZoneTagLibSpecSpec extends Specification {
     void "test detect on POST"() {
         when:
         tagLib.session.timeZone = null
-        request.method = "POST"
+        tagLib.request.method = "POST"
 
         String rendered = tagLib.detect().toString()
 
@@ -97,7 +106,7 @@ class TimeZoneTagLibSpecSpec extends Specification {
         Date date = new Date(116, 11, 1, 14, 0)
         Map attrs = [date: date]
 
-        String rendered = tz.formatDate(attrs).toString()
+        String rendered = tagLib.formatDate(attrs).toString()
 
         then:
         Calendar.getInstance().timeZone == TimeZone.getTimeZone("UTC") //Server time is UTC

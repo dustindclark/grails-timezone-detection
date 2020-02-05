@@ -1,17 +1,15 @@
 package com.captivatelabs.grails.timezone.detection
 
 import asset.pipeline.grails.AssetsTagLib
-import grails.core.support.GrailsConfigurationAware
 import grails.testing.web.taglib.TagLibUnitTest
 import org.grails.plugins.web.DefaultGrailsTagDateHelper
-import org.grails.plugins.web.GrailsTagDateHelper
 import org.grails.plugins.web.taglib.FormTagLib
 import org.grails.plugins.web.taglib.FormatTagLib
 import spock.lang.Specification
 
 class TimeZoneTagLibSpec extends Specification implements TagLibUnitTest<TimeZoneTagLib> {
     def setup() {
-        defineBeans{
+        defineBeans {
             grailsTagDateHelper(DefaultGrailsTagDateHelper)
         }
         mockTagLib(AssetsTagLib)
@@ -26,6 +24,7 @@ class TimeZoneTagLibSpec extends Specification implements TagLibUnitTest<TimeZon
     void "test detect when session.timezone is empty"() {
         when:
         tagLib.session.timeZone = null
+        request.method = "GET"
 
         String rendered = tagLib.detect().toString()
 
