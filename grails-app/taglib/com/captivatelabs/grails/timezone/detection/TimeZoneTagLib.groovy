@@ -1,6 +1,14 @@
 package com.captivatelabs.grails.timezone.detection
 
+import org.grails.plugins.web.taglib.FormTagLib as GrailsFormTagLib
+import org.grails.plugins.web.taglib.FormatTagLib as GrailsFormatTagLib
+
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.temporal.Temporal
+
 class TimeZoneTagLib {
+    public static final String TIMEZONE_FIELD = "zoneid"
     static namespace = 'tz'
 
     def detect = {
@@ -34,11 +42,21 @@ class TimeZoneTagLib {
     }
 
     def datePicker = { attrs ->
-        def formTagLib = getDefaultFormTagLib()
-        if (getCurrentTimezone() && attrs.value) {
-            attrs.value = TimeZoneUtil.offsetDate(Calendar.getInstance().timeZone, getCurrentTimezone(), attrs.value)
+        GrailsFormTagLib formTagLib = getDefaultFormTagLib()
+        TimeZone timezone = getCurrentTimezone()
+        if (timezone) {
+            out << g.hiddenField(name: "${attrs.name}_${TIMEZONE_FIELD}", value: getCurrentTimezone().toZoneId().id)
+            if (attrs.value) {
+                if (attrs.value instanceof Date) {
+                    attrs.value = TimeZoneUtil.offsetDate(Calendar.getInstance().timeZone, timezone, attrs.value)
+                } else if (attrs.value instanceof Instant) {
+                    attrs.value = LocalDateTime.ofInstant(attrs.value, timezone.toZoneId())
+                }
+            }
         }
+
         formTagLib.datePicker.call(attrs)
+
         if (!attrs.suppressTimezone) {
             out << "<span class='tz'>"
             out << tz.show()
@@ -47,7 +65,7 @@ class TimeZoneTagLib {
     }
 
     def formatDate = { attrs ->
-        def formatTagLib = getDefaultFormatTagLib()
+        GrailsFormatTagLib formatTagLib = getDefaultFormatTagLib()
         if (!attrs.timeZone) {
             attrs.timeZone = getCurrentTimezone()
         }
@@ -59,10 +77,10 @@ class TimeZoneTagLib {
     }
 
     private def getDefaultFormTagLib() {
-        return grailsApplication.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.FormTagLib')
+        return grailsApplication.mainContext.getBean(GrailsFormTagLib.class.name)
     }
 
     private getDefaultFormatTagLib() {
-        return grailsApplication.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.FormatTagLib')
+        return grailsApplication.mainContext.getBean(GrailsFormatTagLib.class.name)
     }
 }

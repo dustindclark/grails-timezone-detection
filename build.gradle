@@ -1,0 +1,92 @@
+buildscript {
+    repositories {
+        maven { url "https://repo.grails.org/grails/core" }
+    }
+    dependencies {
+        classpath "org.grails:grails-gradle-plugin:$grailsVersion"
+        classpath "com.bertramlabs.plugins:asset-pipeline-gradle:3.0.10"
+    }
+}
+
+version "${System.env['bamboo_version'] ?: '0.1'}.${System.env['bamboo_buildNumber'] ?: '0'}"
+group "com.captivatelabs.grails.plugins"
+
+apply plugin:"eclipse"
+apply plugin:"idea"
+apply plugin:"org.grails.grails-plugin"
+apply plugin:"org.grails.grails-plugin-publish"
+apply plugin:"asset-pipeline"
+apply plugin:"org.grails.grails-gsp"
+
+String artifactoryUsername = System.getenv("bamboo_ARTIFACTORY_USER") ?: project.hasProperty('artifactoryUsername') ? project.artifactoryUsername : null
+String artifactoryPassword = System.getenv("bamboo_ARTIFACTORY_PASSWORD") ?: project.hasProperty('artifactoryPassword') ? project.artifactoryPassword : null
+
+repositories {
+    mavenLocal()
+    maven {
+        url "https://repo.captivatelabs.com/grails"
+        credentials {
+            username artifactoryUsername
+            password artifactoryPassword
+        }
+    }
+}
+
+configurations {
+    developmentOnly
+    runtimeClasspath {
+        extendsFrom developmentOnly
+    }
+}
+
+dependencies {
+    developmentOnly("org.springframework.boot:spring-boot-devtools")
+    compile "org.springframework.boot:spring-boot-starter-logging"
+    compile "org.springframework.boot:spring-boot-autoconfigure"
+    compile "org.grails:grails-core"
+    compile "org.springframework.boot:spring-boot-starter-actuator"
+    provided "org.springframework.boot:spring-boot-starter-tomcat"
+    compile "org.grails:grails-web-boot"
+    compile "org.grails:grails-logging"
+    compile "org.grails:grails-plugin-rest"
+    compile "org.grails:grails-plugin-databinding"
+    compile "org.grails.plugins:gsp"
+    console "org.grails:grails-console"
+    profile "org.grails.profiles:web-plugin"
+    compile "com.bertramlabs.plugins:asset-pipeline-grails:3.0.10"
+    testCompile "org.mockito:mockito-core"
+    testCompile "org.grails:grails-web-testing-support"
+}
+
+bootRun {
+    jvmArgs(
+        '-Dspring.output.ansi.enabled=always', 
+        '-noverify', 
+        '-XX:TieredStopAtLevel=1',
+        '-Xmx1024m')
+    sourceResources sourceSets.main
+    String springProfilesActive = 'spring.profiles.active'
+    systemProperty springProfilesActive, System.getProperty(springProfilesActive)
+}
+
+assets {
+    packagePlugin = true
+}
+
+grailsPublish {
+    user = System.getenv("bamboo_BINTRAY_USER") ?: ''
+    key = System.getenv("bamboo_BINTRAY_PASSWORD") ?: ''
+    userOrg = 'captivatelabs'
+    //githubSlug = 'foo/bar'
+    license {
+        name = 'MIT'
+    }
+    title = "Grails Timezone Detection Plugin"
+    desc = "The Grails Timezone Detection Plugin makes use of the jsTimezoneDetect Library in order to make the client/browser's timezone available on the server/JVM."
+    developers = [dustindclark: "Dustin D. Clark"]
+    portalUser = System.getenv("GRAILS_PORTAL_USER") ?: ''
+    portalPassword = System.getenv("GRAILS_PORTAL_PASSWORD") ?: ''
+    websiteUrl = 'https://www.captivatelabs.com'
+    vcsUrl = 'https://github.com/dustindclark/grails-timezone-detection'
+    issueTrackerUrl = 'https://github.com/dustindclark/grails-timezone-detection/issues'
+}
