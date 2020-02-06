@@ -5,13 +5,16 @@ client/browser's timezone available on the server/JVM.  Additionally, this plugi
 the default Grails formatDate tag to make use of the user's current timezone.
 
 # Installation
-
+ 
 Add the following to your BuildConfig.groovy in the plugins section:
 
 ```groovy
 compile "org.grails.plugins:timezone-detection:latest.integration"
 
 ```
+
+## Latest Version
+[ ![Latest Version](https://api.bintray.com/packages/captivatelabs/plugins/timezone-detection/images/download.svg) ](https://bintray.com/captivatelabs/plugins/timezone-detection/_latestVersion)
 
 # Usage
 

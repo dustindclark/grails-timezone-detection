@@ -77,7 +77,7 @@ grailsPublish {
     user = System.getenv("bamboo_BINTRAY_USER") ?: ''
     key = System.getenv("bamboo_BINTRAY_PASSWORD") ?: ''
     userOrg = 'captivatelabs'
-    //githubSlug = 'foo/bar'
+    githubSlug = 'dustindclark/grails-timezone-detection'
     license {
         name = 'MIT'
     }
