@@ -2,7 +2,7 @@ package com.captivatelabs.grails.timezone.detection
 
 import grails.plugins.Plugin
 
-class TimezoneDetectionGrailsPlugin extends Plugin {
+class TimeZoneDetectionGrailsPlugin extends Plugin {
     def version = "0.4-SNAPSHOT"
     def grailsVersion = "4.0 > *"
     def loadAfter = ['data-binding', 'groovyPages']
@@ -27,6 +27,7 @@ class TimezoneDetectionGrailsPlugin extends Plugin {
             timeZoneAwareDateEditor(TimeZoneAwareDateEditor)
             formTagLib(FormTagLib)
             formatTagLib(FormatTagLib)
+            grailsTagDateHelper(TimeZoneTagHelper)
         }
     }
 }
