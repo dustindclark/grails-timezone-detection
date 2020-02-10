@@ -27,7 +27,6 @@ class TimeZoneDetectionGrailsPlugin extends Plugin {
             timeZoneAwareDateEditor(TimeZoneAwareDateEditor)
             formTagLib(FormTagLib)
             formatTagLib(FormatTagLib)
-            grailsTagDateHelper(TimeZoneTagHelper)
         }
     }
 }

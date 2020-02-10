@@ -67,7 +67,7 @@ class TimeZoneTagLib {
     def formatDate = { attrs ->
         GrailsFormatTagLib formatTagLib = getDefaultFormatTagLib()
         if (!attrs.timeZone) {
-            attrs.timeZone = getCurrentTimezone()
+            attrs.timeZone = getCurrentTimezone()?.toZoneId()
         }
         out << formatTagLib.formatDate.call(attrs)
     }
